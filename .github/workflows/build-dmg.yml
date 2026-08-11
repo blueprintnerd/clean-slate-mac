@@ -1,0 +1,27 @@
+name: Build macOS DMG
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Build app and DMG
+        run: |
+          chmod +x ./build_dmg.sh
+          ./build_dmg.sh
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Clean-Slate-dmg
+          path: "Clean Slate.dmg"
+          if-no-files-found: error
