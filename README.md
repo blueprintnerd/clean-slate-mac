@@ -1,23 +1,22 @@
 # Clean Slate
 
-A tiny native macOS utility with one button: quit every open app and clear
-every pinned icon from the Dock.
+A tiny native macOS utility with one button: quit every open app, which
+clears their unpinned Dock icons and "currently open" indicator dots.
+Pinned Dock icons are left completely untouched.
 
-## What it does when you click "Quit All & Clear Dock"
+## What it does when you click "Quit All Apps"
 
-1. Asks every regular, user-facing app (except Finder) to quit via
-   `NSRunningApplication.terminate()` — apps with unsaved changes get a
-   chance to prompt you first, same as quitting them normally.
-2. Backs up your current Dock layout (`defaults export com.apple.dock …`)
-   to `~/Library/Application Support/CleanSlate/dock-backup.plist`.
-3. Clears the Dock's pinned-apps list (`defaults write com.apple.dock
-   persistent-apps -array`) and restarts the Dock process so the change
-   shows immediately. Since every other app was just quit, their
-   "currently open" indicator dots disappear along with them.
+Asks every regular, user-facing app (except Finder) to quit via
+`NSRunningApplication.terminate()` — apps with unsaved changes get a chance
+to prompt you first, same as quitting them normally. Once an app quits:
 
-A confirmation dialog appears before anything happens, and a "Restore Dock"
-button un-does the Dock wipe using the automatic backup (does not relaunch
-quit apps).
+- If it wasn't pinned to the Dock, its icon disappears from the Dock.
+- Either way, its "currently open" indicator dot disappears.
+
+Nothing in the Dock's pinned-apps list (`com.apple.dock persistent-apps`)
+is ever modified — this only quits apps, it doesn't touch your Dock layout.
+
+A confirmation dialog appears before anything happens.
 
 ## Build the DMG without a Mac (GitHub Actions)
 
