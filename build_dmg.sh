@@ -44,6 +44,8 @@ cat > "$APP_DIR/Contents/Info.plist" <<PLIST
     <string>13.0</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Clean Slate needs to control Finder to close its open windows.</string>
 </dict>
 </plist>
 PLIST

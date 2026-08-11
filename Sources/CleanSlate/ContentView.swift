@@ -11,7 +11,7 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Clean Slate")
                     .font(.title2).bold()
-                Text("Quits every open app, clearing its Dock icon (if unpinned) and its \"currently open\" indicator dot. Pinned Dock icons are left exactly where they are.")
+                Text("Quits every open app and closes all Finder windows, clearing unpinned Dock icons and \"currently open\" indicator dots. Pinned Dock icons are left exactly where they are.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -57,7 +57,7 @@ struct ContentView: View {
             Button("Cancel", role: .cancel) {}
             Button("Continue", role: .destructive) { runCleanSlate() }
         } message: {
-            Text("Every open app (except Finder) will be asked to quit — apps with unsaved work may prompt you first. Pinned Dock icons are not affected.")
+            Text("Every open app (except Finder) will be asked to quit — apps with unsaved work may prompt you first. All Finder windows will also close, but Finder itself keeps running. Pinned Dock icons are not affected.")
         }
     }
 
@@ -69,6 +69,9 @@ struct ContentView: View {
         Task.detached {
             let quitNames = AppQuitter.quitAllApps()
             await appendLog(quitNames.isEmpty ? "No other apps were running." : "Asked to quit: \(quitNames.joined(separator: ", "))")
+
+            let closedFinder = FinderCloser.closeAllWindows()
+            await appendLog(closedFinder ? "Closed all Finder windows." : "Could not close Finder windows.")
 
             await MainActor.run {
                 isRunning = false
