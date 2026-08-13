@@ -66,23 +66,16 @@ struct ContentView: View {
         errorMessage = nil
         log.append("── Starting ──")
 
-        Task.detached {
-            let quitNames = AppQuitter.quitAllApps()
-            await appendLog(quitNames.isEmpty ? "No other apps were running." : "Asked to quit: \(quitNames.joined(separator: ", "))")
+        // AppKit and AppleScript calls must happen on the main thread;
+        // both are quick (they just post events), so this doesn't block the UI.
+        let quitNames = AppQuitter.quitAllApps()
+        log.append(quitNames.isEmpty ? "No other apps were running." : "Asked to quit: \(quitNames.joined(separator: ", "))")
 
-            let closedFinder = FinderCloser.closeAllWindows()
-            await appendLog(closedFinder ? "Closed all Finder windows." : "Could not close Finder windows.")
+        let closedFinder = FinderCloser.closeAllWindows()
+        log.append(closedFinder ? "Closed all Finder windows." : "Could not close Finder windows.")
 
-            await MainActor.run {
-                isRunning = false
-                log.append("── Done ──")
-            }
-        }
-    }
-
-    @MainActor
-    private func appendLog(_ line: String) {
-        log.append(line)
+        isRunning = false
+        log.append("── Done ──")
     }
 }
 
