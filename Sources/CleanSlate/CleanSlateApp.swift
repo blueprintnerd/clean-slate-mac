@@ -20,6 +20,7 @@ struct CleanSlateApp: App {
         WindowGroup {
             ContentView()
                 .frame(minWidth: 460, minHeight: 420)
+                .alwaysOnTop()
         }
         .windowResizability(.contentSize)
     }
