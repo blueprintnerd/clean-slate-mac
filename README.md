@@ -23,24 +23,3 @@ A confirmation dialog appears before anything happens. The first time you
 run it, macOS will ask you to approve an Automation permission so Clean
 Slate can tell Finder to close its windows — allow it under System
 Settings → Privacy & Security → Automation if you miss the prompt.
-
-## Build the DMG without a Mac (GitHub Actions)
-
-This repo includes `.github/workflows/build-dmg.yml`, which builds the app
-on GitHub's real macOS runners and uploads the DMG as a downloadable
-artifact.
-
-1. Push this project to a GitHub repo.
-2. Actions tab → "Build macOS DMG" → Run workflow (or push to `main`).
-3. Download the `Clean-Slate-dmg` artifact — it contains `Clean Slate.dmg`.
-4. First launch: since it's only ad-hoc signed (not notarized), right-click
-   the app → Open to get past Gatekeeper.
-
-## Build locally (if you ever have Mac access)
-
-```bash
-chmod +x build_dmg.sh
-./build_dmg.sh
-```
-
-Produces `Clean Slate.dmg` in the project root.
